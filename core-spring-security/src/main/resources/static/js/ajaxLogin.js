@@ -3,9 +3,6 @@ function formLogin(e) {
         let password = $("input[name='password']").val().trim();
         let data = {"username" : username, "password" : password};
 
-   //     var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
-   //     var csrfToken = $('meta[name="_csrf"]').attr('content')
-
         $.ajax({
             type: "post",
             url: "api/login",
