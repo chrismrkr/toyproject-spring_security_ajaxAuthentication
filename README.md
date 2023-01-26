@@ -38,10 +38,20 @@ ajax, form 인증 보안 설정 클래스 모두 @Configuration을 통해 관리
 
 Ajax 인증 전용의 AuthenticationManager와 AuthenticationProvider를 등록하지 않으면, Form 인증에서 사용되는 Manager와 Provider로 연결된다.
 
-이를 해결하기 위해 AjaxLoginProcessingFilter의 부모 클래스인 AbstractAuthenticationProcessingFilter를 분석했다.
+이를 해결하기 위해 AjaxLoginProcessingFilter의 부모 추상 클래스인 AbstractAuthenticationProcessingFilter를 분석했다.
 
 활용할 수 있는 코드가 아래와 같이 존재했다.
 
 ```java
+public abstract class AbstractAuthenticationProcessingFilter extends GenericFilterBean implements ApplicationEventPublisherAware, MessageSourceAware {
+  ...
+  private AuthenticationManager authenticationManager;
+  ...
+  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+  }
+  ...
+}
+```
 
-```-
+AuthenticaionManager를 구현한 후, Provider를 set한 후 filter에 설정하여 이 문제를 해결할 수 있었다.
